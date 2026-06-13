@@ -2,6 +2,9 @@ site_name: OAuth 2.0 Guide
 site_description: A comprehensive guide to OAuth 2.0 authentication and authorization flows
 site_author: Your Name
 
+# Docs directory (where MD files are located)
+docs_dir: .
+
 # Repository link
 repo_url: https://github.com/yourusername/oauth-guide
 repo_name: oauth-guide
