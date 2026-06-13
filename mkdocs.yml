@@ -34,11 +34,6 @@ nav:
 # Markdown extensions
 markdown_extensions:
   - admonition
-  - pymdownx.details
-  - pymdownx.tabbed:
-      variant: inline
-  - pymdownx.highlight:
-      anchor_linenums: true
   - tables
   - toc:
       permalink: true
