@@ -12,9 +12,7 @@ theme:
     primary: blue
     accent: blue
   features:
-    - navigation.tabs
-    - navigation.sections
-    - navigation.top
+    - navigation.instant
     - search.suggest
     - search.highlight
 
