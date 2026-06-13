@@ -42,6 +42,8 @@ plugins:
 extra:
   mermaid:
     version: "9.1.7"
+  javascript:
+    - javascripts/mermaid-render.js
 
 # Copyright
 copyright: Copyright &copy; 2024 Arvind Waiker
