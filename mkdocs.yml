@@ -21,12 +21,10 @@ theme:
 # Navigation
 nav:
   - Home: index.md
-  - Authorization Code Flow:
-      - Overview: authorization-code-flow.md
-      - With PKCE: authorization-code-flow.md#authorization-code-flow-with-pkce
-  - Client Credentials Flow: client-credentials-flow.md
-  - Device Code Flow: device-code-flow.md
-  - Refresh Token Flow: refresh-token-flow.md
+  - Authorization Code Flow: Authorization-Code-Flow.md
+  - Client Credentials Flow: Client-Credentials-Flow.md
+  - Device Code Flow: Device-Code-Flow.md
+  - Refresh Token Flow: Refresh-Token-Flow.md
 
 # Markdown extensions
 markdown_extensions:
