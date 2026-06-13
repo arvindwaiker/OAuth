@@ -457,23 +457,20 @@ public class OAuthPKCE {
 ### Block Diagram
 
 ```mermaid
-block-beta
-    columns 4
+flowchart TB
+    subgraph Client[Client App]
+        direction LR
+        U[User] -->|interacts| B[Browser<br/Frontend]
+        B -->|redirects| CA[Client App<br/Backend]
+    end
+    CA -->|code + secret| AS[Auth Server]
+    AS -->|access_token| RS[Resource Server]
 
-    User["User"]<-->Browser["Browser<br/>(Frontend)"]
-    Browser<-->ClientApp["Client App<br/>(Backend)"]
-    ClientApp<-->Auth["Auth Server"]
-    Auth<-->Resource["Resource Server"]
-
-    note:1,1 User interacts<br/>with Browser
-    note:1,2 Browser redirects<br/>to Auth Server
-    note:1,3 Backend exchanges<br/>code for tokens
-
-    style User fill:#e1f5fe
-    style Browser fill:#fff9c4
-    style ClientApp fill:#e8f5e8
-    style Auth fill:#fff3e0
-    style Resource fill:#fce4ec
+    style U fill:#e1f5fe
+    style B fill:#fff9c4
+    style CA fill:#e8f5e8
+    style AS fill:#fff3e0
+    style RS fill:#fce4ec
 ```
 
 ### Roles Explained

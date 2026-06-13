@@ -73,22 +73,12 @@ sequenceDiagram
 ### Block Diagram
 
 ```mermaid
-block-beta
-    columns 2
+flowchart LR
+    C[Client App] -->|refresh_token| A[Auth Server]
+    A -->|new_access_token| C
 
-    space
-
-    block:2,1
-        columns 2
-        Client["Client App"]<-->Auth["Auth Server"]
-    end
-
-    space
-
-    note:1,1 Auth handles<br/>token refresh
-
-    style Client fill:#e8f5e8
-    style Auth fill:#fff3e0
+    style C fill:#e8f5e8
+    style A fill:#fff3e0
 ```
 
 ## Token Storage Best Practices

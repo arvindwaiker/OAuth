@@ -75,15 +75,13 @@ sequenceDiagram
 ### Block Diagram
 
 ```mermaid
-block-beta
-    columns 3
+flowchart LR
+    A[Client App<br/Service/Machine] -->|client_id + secret| B[Auth Server]
+    B -->|access_token| C[Resource Server<br/API]
 
-    Client["Client App<br/>(Service/Machine)"]<-->Auth["Auth Server<br/>(Authorization Server)"]
-    Auth<-->Resource["Resource Server<br/>(API)"]
-
-    style Client fill:#e8f5e8
-    style Auth fill:#fff3e0
-    style Resource fill:#fce4ec
+    style A fill:#e8f5e8
+    style B fill:#fff3e0
+    style C fill:#fce4ec
 ```
 
 ## Security Considerations

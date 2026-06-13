@@ -149,21 +149,24 @@ sequenceDiagram
 ### Block Diagram
 
 ```mermaid
-block-beta
-    columns 3
+flowchart TB
+    subgraph Device[Device]
+        D[TV/Console/IoT]
+    end
+    subgraph AuthServer[Auth Server]
+        AS[Auth Server]
+    end
+    subgraph UserDevice[User Device]
+        U[User] -->|opens URL| VD[Phone/Computer]
+    end
 
-    Device["Device<br/>(TV/Console/IoT)"]<-->Auth["Auth Server"]
+    D -->|device_code| AS
+    VD -->|authenticates| AS
 
-    User["User"]<-->VerificationDevice["Phone/Computer"]
-
-    VerificationDevice<-->Auth
-
-    note:1,1 User authenticates<br/>on separate device
-
-    style Device fill:#e8f5e8
-    style Auth fill:#fff3e0
-    style User fill:#e1f5fe
-    style VerificationDevice fill:#f3e5f5
+    style D fill:#e8f5e8
+    style AS fill:#fff3e0
+    style U fill:#e1f5fe
+    style VD fill:#f3e5f5
 ```
 
 ## Code Example
