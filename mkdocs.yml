@@ -1,0 +1,56 @@
+site_name: OAuth 2.0 Guide
+site_description: A comprehensive guide to OAuth 2.0 authentication and authorization flows
+site_author: Your Name
+
+# Repository link
+repo_url: https://github.com/yourusername/oauth-guide
+repo_name: oauth-guide
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+# Navigation
+nav:
+  - Home: index.md
+  - Authorization Code Flow:
+      - Overview: authorization-code-flow.md
+      - With PKCE: authorization-code-flow.md#authorization-code-flow-with-pkce
+  - Client Credentials Flow: client-credentials-flow.md
+  - Device Code Flow: device-code-flow.md
+  - Refresh Token Flow: refresh-token-flow.md
+
+# Markdown extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      variant: inline
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - tables
+  - toc:
+      permalink: true
+
+# Plugins
+plugins:
+  - search:
+      lang: en
+  - mermaid2:
+      version: "9.1.7"
+
+# Extra JavaScript for Mermaid
+extra:
+  mermaid:
+    version: "9.1.7"
+
+# Copyright
+copyright: Copyright &copy; 2024 Your Name

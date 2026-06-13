@@ -30,31 +30,51 @@ The standard Authorization Code Flow is designed for server-side applications th
 ```mermaid
 sequenceDiagram
     participant User
-    participant Client as Client App
+    participant Browser as Browser (Frontend)
+    participant ClientApp as Client App (Backend)
     participant AuthServer as Authorization Server
     participant ResourceServer as Resource Server
 
-    Note over User,Client: 1. User initiates login
-    User->>Client: Click "Sign in"
-    Client->>Client: Generate state parameter
-    Client->>AuthServer: Redirect to /authorize
-    Note over AuthServer: 2. User consents
+    Note over User,Browser: 1. User clicks "Sign in"
+    User->>Browser: Click "Sign in"
+    Browser->>ClientApp: Request login page
+    ClientApp->>ClientApp: Generate state parameter
+    ClientApp->>Browser: Redirect to auth server URL
+
+    Note over Browser,AuthServer: 2. Browser redirects to Auth Server
+    Browser->>AuthServer: GET /authorize?client_id=...&redirect_uri=...
+
+    Note over AuthServer,User: 3. User logs in & consents
     AuthServer->>User: Show login/consent screen
     User->>AuthServer: Enter credentials & consent
-    AuthServer->>Client: Redirect with authorization_code
-    Note over Client: 3. Exchange code for tokens
-    Client->>AuthServer: POST code + client_secret
-    AuthServer->>Client: Return access_token + refresh_token
-    Note over Client,ResourceServer: 4. Access protected resource
-    Client->>ResourceServer: GET /api/data with access_token
-    ResourceServer->>Client: Return protected data
+
+    Note over AuthServer,Browser: 4. Auth server redirects with code
+    AuthServer->>Browser: Redirect to redirect_uri?code=...
+
+    Note over Browser,ClientApp: 5. Browser sends code to backend
+    Browser->>ClientApp: POST /callback?code=...
+
+    Note over ClientApp,AuthServer: 6. Backend exchanges code for tokens
+    ClientApp->>AuthServer: POST /token (code + client_secret)
+
+    Note over AuthServer,ClientApp: 7. Auth server returns tokens
+    AuthServer->>ClientApp: access_token + refresh_token
+
+    Note over ClientApp,ResourceServer: 8. Backend accesses protected resource
+    ClientApp->>ResourceServer: GET /api/data (Authorization: Bearer ...)
+    ResourceServer->>ClientApp: Return protected data
+
+    Note over Browser,ClientApp: 9. Backend returns data to browser
+    ClientApp->>Browser: Render page with user data
 ```
 
 ### Step-by-Step
 
-1. **User Initiates Login**
-   - Client generates a `state` parameter for CSRF protection
-   - Client redirects user to authorization server
+1. **User Clicks Sign In**
+   - User clicks "Sign in" button in browser
+   - Browser requests login page from backend
+   - Backend generates `state` parameter for CSRF protection
+   - Backend redirects browser to authorization server
 
 2. **Redirect to Authorization Server**
    ```
@@ -72,10 +92,13 @@ sequenceDiagram
    - User approves the request
 
 4. **Receive Authorization Code**
-   - Authorization server redirects to `redirect_uri`
-   - Returns: `code`, `state`
+   - Authorization server redirects browser to `redirect_uri`
+   - Browser receives the authorization code in the callback
+   - Browser sends the code to backend (via POST or server-side handling)
 
 5. **Exchange Code for Tokens**
+   - Backend receives the code
+   - Backend calls token endpoint with code + client_secret
    ```
    POST /token
    Content-Type: application/x-www-form-urlencoded
@@ -99,10 +122,14 @@ sequenceDiagram
    ```
 
 7. **Access Protected Resources**
+   - Backend uses access_token to call APIs
    ```
    GET /api/userinfo
    Authorization: Bearer eyJ...
    ```
+
+8. **Render Page**
+   - Backend returns the requested page with user data
 
 ### Security Considerations
 
@@ -433,17 +460,30 @@ public class OAuthPKCE {
 block-beta
     columns 4
 
-    User["User"]<-->Client["Client App"]
-    Client<-->Auth["Auth Server"]
+    User["User"]<-->Browser["Browser<br/>(Frontend)"]
+    Browser<-->ClientApp["Client App<br/>(Backend)"]
+    ClientApp<-->Auth["Auth Server"]
     Auth<-->Resource["Resource Server"]
 
-    note:1,2 PKCE adds<br/>code_verifier<br/>proof step
+    note:1,1 User interacts<br/>with Browser
+    note:1,2 Browser redirects<br/>to Auth Server
+    note:1,3 Backend exchanges<br/>code for tokens
 
     style User fill:#e1f5fe
-    style Client fill:#e8f5e8
+    style Browser fill:#fff9c4
+    style ClientApp fill:#e8f5e8
     style Auth fill:#fff3e0
     style Resource fill:#fce4ec
 ```
+
+### Roles Explained
+
+| Component | Description |
+|----------|------------|
+| **Browser** | Frontend that user interacts with - handles redirects, displays login screen, receives callback |
+| **Client App (Backend)** | Server that stores `client_secret` - generates state, exchanges code for tokens, calls APIs |
+| **Authorization Server** | Issues tokens after authentication (Google, GitHub, Okta, etc.) |
+| **Resource Server** | API that serves protected resources |
 
 ### Security Considerations (Both Flows)
 
